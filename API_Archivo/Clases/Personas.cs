@@ -167,6 +167,47 @@ namespace API_Archivo.Clases
         }
 
 
+        public bool Actualizar_Contrasenia(string correo, string contrasenia)
+        {
+
+            bool Persona_actualizada = false;
+
+            using (MySqlConnection conexion = new MySqlConnection(Global.cadena_conexion))
+            {
+                int rowsaffected = 0;
+                MySqlCommand comando = new MySqlCommand("UPDATE personas " +
+                    "SET Contrasenia=@Contrasenia " +
+                    "WHERE Correo=@Correo", conexion);
+                
+                comando.Parameters.Add("@Correo", MySqlDbType.VarChar).Value = correo;
+                comando.Parameters.Add("@Contrasenia", MySqlDbType.VarChar).Value = contrasenia;
+
+
+                try
+                {
+                    conexion.Open();
+                    rowsaffected = comando.ExecuteNonQuery();
+
+                    if (rowsaffected >= 1)
+                    {
+                        Persona_actualizada = true;
+                    }
+
+                }
+                catch (MySqlException ex)
+                {
+                    //MessageBox.Show(ex.ToString());
+                }
+                finally
+                {
+                    conexion.Close();
+                }
+                return Persona_actualizada;
+
+            }
+        }
+
+
 
 
         public List<Personas> Iniciar_Sesion(string correo, string contrasenia)

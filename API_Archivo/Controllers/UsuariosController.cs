@@ -65,6 +65,22 @@ namespace API_Archivo.Controllers
             }
         }
 
+        [HttpPatch]
+        [Route("Actualizar_Contrasenia")]
+        public string Actualizar_Contrasenia(string correo,string contrasenia)
+        {
+            Personas obj_persona = new Personas();
+
+            if (obj_persona.Actualizar_Contrasenia(correo, contrasenia))
+            {
+                return "Contrasenia actualizada";
+            }
+            else
+            {
+                return "Error al actualizar contrasenia";
+            }
+        }
+
         [HttpGet]
         [Route("Consultar_Personas_Por_Fraccionamiento")]
         public List<Personas> Consultar_Personas_Por_Fraccionamiento(int id_fraccionamiento)

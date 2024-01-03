@@ -135,6 +135,40 @@ namespace CardManagement
             return res;
         }
 
+        public bool InsertUser2(string id_usuario, string nombre, string fechaActual, string fechaProximoPago, string telefono)
+        {
+            //string telefonoFormateado = $"{telefono.Substring(0, 3)}-{telefono.Substring(3, 3)}-{telefono.Substring(6, 3)}-{telefono.Substring(9)}";
+            string telefonoFormateado = "111401";
+            Console.WriteLine(telefonoFormateado);
+            
+            string szUrl = "/ISAPI/AccessControl/UserInfo/SetUp?format=json";
+            string szRequest = "{\"UserInfo\":{\"employeeNo\":\"" + id_usuario +
+            "\",\"name\":\"" + nombre +
+            "\",\"userType\":\"normal\",\"Valid\":{\"enable\":true,\"beginTime\":\"" + fechaActual
+            + "\",\"endTime\":\"" + fechaProximoPago + "\"},\"doorRight\": \"1\",\"RightPlan\"" +
+            ":[{\"doorNo\":1,\"planTemplateNo\":\"1\"}],\"callNumbers\":[\"" + telefonoFormateado + "\"]}}";
+            string szMethod = "PUT";
+
+            string szResponse = ActionISAPI(szUrl, szRequest, szMethod);
+            bool res = false;
+            if (szResponse != string.Empty)
+            {
+                ResponseStatus rs = JsonConvert.DeserializeObject<ResponseStatus>(szResponse);
+                if (1 == rs.statusCode)
+                {
+                    Console.WriteLine("Set UserInfo Succ!");
+                    res = true;
+                }
+                else
+                {
+                    Console.WriteLine(rs.errorMsg);
+                    res = false;
+                }
+            }
+            return res;
+        }
+
+
         public static bool InsertCardUser(string id_usuario)
         {
                 string szUrl = "/ISAPI/AccessControl/CardInfo/SetUp?format=json";
